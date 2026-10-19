@@ -2,8 +2,6 @@
 on:
   workflow_dispatch:
 
-engine: copilot
-
 timeout-minutes: 5
 
 permissions:
