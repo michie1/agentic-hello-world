@@ -19,7 +19,22 @@ It runs only when started manually and creates one hello-world issue.
    Or run `gh aw run hello-world` from this directory.
 5. Look for a new issue whose title starts with `[AI demo]`.
 
-## Changes and cost
+## Direct Copilot CLI demo
+
+The separate `.github/workflows/hello-direct.yml` workflow calls Copilot CLI
+directly with `--model auto`, without gh-aw's model resolver. It uses the same
+`COPILOT_GITHUB_TOKEN` secret and writes a greeting to the run summary.
+
+1. Publish the YAML file to the default branch.
+2. Open **Actions → Hello with Copilot CLI → Run workflow**.
+3. Open the completed run's summary to read the greeting.
+
+This workflow does not need compilation. It uses pinned CLI and setup-action
+versions, no repository checkout, and no GitHub token permissions. Its AI use
+counts against your Copilot allowance. Free-plan access still needs to be
+confirmed by a successful run.
+
+## Maintaining the agentic demo
 
 1. Edit the Markdown source; run `gh aw compile` after changing its YAML settings.
 2. Keep the source and generated lock file together in Git.

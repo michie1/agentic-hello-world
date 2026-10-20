@@ -1,0 +1,41 @@
+name: Hello with Copilot CLI
+
+on:
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  hello:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Set up Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "22"
+
+      - name: Install Copilot CLI
+        run: npm install -g @github/copilot@1.0.96
+
+      - name: Generate a greeting
+        env:
+          COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
+          COPILOT_AUTO_UPDATE: "false"
+        shell: bash
+        run: |
+          if [ -z "$COPILOT_GITHUB_TOKEN" ]; then
+            echo "::error::Add the COPILOT_GITHUB_TOKEN repository secret first."
+            exit 1
+          fi
+          copilot --model auto \
+            --prompt "Write a short hello-world greeting and a two-line poem about software maintenance. Only return the text. Do not use tools." \
+            --disable-builtin-mcps \
+            --deny-tool shell --deny-tool write --deny-tool read --deny-tool url \
+            --silent > "$RUNNER_TEMP/greeting.md"
+          test -s "$RUNNER_TEMP/greeting.md"
+
+      - name: Show greeting in the run summary
+        shell: bash
+        run: cat "$RUNNER_TEMP/greeting.md" >> "$GITHUB_STEP_SUMMARY"
